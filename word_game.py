@@ -2,7 +2,7 @@ import random
 import datetime
 from nltk.corpus import words as nltk_words
 
-def is_english_word(word):
+def is_in_dictionary(word):
 
     dictionary = dict.fromkeys(nltk_words.words(), None)
     try:
@@ -10,7 +10,6 @@ def is_english_word(word):
         return True
     except KeyError:
         return False
-
 
 class Player:
 
@@ -27,7 +26,7 @@ class Player:
 alphabet = [chr(i) for i in range(ord('a'), ord('z') + 1)
             if chr(i) not in ('q', 'x', 'y', 'z')]
 
-# initiate game: number players, names and so on
+# initiate game: number of players, names
 while True:
     list_players = input("enter player names: ").split()
     if list_players:
@@ -36,17 +35,14 @@ while True:
         print("try again...")
 number_players = len(list_players)
 
-
 d = {}
 for name in list_players:
     d[name] = Player(name, 0, [], [], 60, 0)
 
-
 print(50 * "-")
 for x in d.keys():
     player = d[x]
-    print("")
-    print(f"{player.name}'s turn!")
+    print(f"\n{player.name}'s turn!")
     input("press any key to start: ")
 
     # starting time attribute of player. Bonus +=1 implies starting time +=1!
@@ -72,7 +68,7 @@ for x in d.keys():
 
         player.played_words.append(word)
 
-        if not is_english_word(word):
+        if not is_in_dictionary(word):
             print(f"{word} is not in the dictionary")
             continue
 
@@ -93,11 +89,9 @@ for x in d.keys():
         player.bonus += bonus
 
         print(f"your score: {player.score}")
-        print(
-            f"time left: {player.time_limit - (datetime.datetime.now() - start).seconds} seconds ")
+        print(f"time left: {player.time_limit - (datetime.datetime.now() - start).seconds} seconds ")
 
-print("")
-print("scores:")
+print("\nscores:")
 for x in d.keys():
     if len(d[x].played_words) > 0:
         efficiency = d[x].score / len(d[x].played_words)
